@@ -1,3 +1,11 @@
+# Custom
+worthy.regex
+neither.regex
+rest.regex
+db.sqlite3
+
+###############################################################################
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

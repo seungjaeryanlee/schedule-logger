@@ -1,0 +1,5 @@
+# This is an example log.
+1:00 / Something
+2:00 / Another Thing / With More
+3:30 / Great Things
+10:00 / Sleep
