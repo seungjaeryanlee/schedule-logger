@@ -1,6 +1,7 @@
 import os.path
 import re
 import sqlite3
+from sys import argv
 from datetime import timedelta
 
 # Get Regex
@@ -109,4 +110,14 @@ def parseFile(filename):
     # Save to SQLite3 Database
     saveToDB(worthyString, restString)
 
-parseFile('log.txt')
+if len(argv) == 1:
+    print('No argument specified.')
+    quit()
+if len(argv) == 3:
+    print('Too many arguments specified.')
+    quit()
+if not os.path.exists(argv[1]):
+    print('No such file exists')
+    quit()
+
+parseFile(argv[1])
