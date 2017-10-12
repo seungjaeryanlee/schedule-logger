@@ -111,14 +111,18 @@ def parseFile(filename):
     # Save to SQLite3 Database
     saveToDB(worthyString, restString)
 
-if len(argv) == 1:
-    print('No argument specified.')
-    quit()
-if len(argv) == 3:
-    print('Too many arguments specified.')
-    quit()
-if not os.path.exists(argv[1]):
-    print('No such file exists')
-    quit()
+def main():
+    if len(argv) == 1:
+        print('No argument specified.')
+        quit()
+    if len(argv) == 3:
+        print('Too many arguments specified.')
+        quit()
+    if not os.path.exists(argv[1]):
+        print('No such file exists')
+        quit()
 
-parseFile(argv[1])
+    parseFile(argv[1])
+
+if __name__ == '__main__':
+    main()
