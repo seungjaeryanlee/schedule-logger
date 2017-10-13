@@ -22,7 +22,11 @@ def timeDeltaToString(td):
         str((td.seconds // 60) % 60).zfill(2)
 
 
-def parseActions(actions):
+def logUnclassified(line):
+    with open('unclassified.log', 'a+') as log:
+        log.write(line + '\n')
+
+def parseActions(line, actions):
     for regex in wRegex:
         for action in actions:
             if re.search(regex, action):
@@ -38,8 +42,8 @@ def parseActions(actions):
             if re.search(regex, action):
                 return 'R'
 
+    logUnclassified(line)
     return 'X'
-
 
 def saveToDB(worthyString, restString):
     if not os.path.exists('db.sqlite3'):
@@ -84,7 +88,7 @@ def parseFile(filename):
         tokens.pop(0)
 
         # Parse tokens
-        result = parseActions(tokens)
+        result = parseActions(line, tokens)
         if result == 'W':
             worthyTime += deltaTime
         elif result == 'R':
