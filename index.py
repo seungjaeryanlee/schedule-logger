@@ -16,8 +16,11 @@ with open('neither.regex') as file:
     nRegex = file.readlines()
     nRegex = [regex.strip() for regex in nRegex]
 
+
 def timeDeltaToString(td):
-    return str(td.seconds//3600).zfill(2) + ':' + str((td.seconds//60)%60).zfill(2);
+    return str(td.seconds // 3600).zfill(2) + ':' + \
+        str((td.seconds // 60) % 60).zfill(2)
+
 
 def logUnclassified(line):
     with open('unclassified.log', 'a+') as log:
@@ -40,7 +43,7 @@ def parseActions(line, actions):
                 return 'R'
 
     logUnclassified(line)
-    return 'X';
+    return 'X'
 
 def saveToDB(worthyString, restString):
     if not os.path.exists('db.sqlite3'):
@@ -55,11 +58,12 @@ def saveToDB(worthyString, restString):
 
     # Insert Data
     cursor.execute('INSERT INTO day VALUES (?, ?)', [worthyString, restString])
-    
+
     conn.commit()
     conn.close()
 
     print('Saved to database.')
+
 
 def parseFile(filename):
     # Get Data
@@ -95,17 +99,19 @@ def parseFile(filename):
             # Ask user
             while True:
                 print(line)
-                answer = input('Should the event above be marked W, R or N? (W, R, N): ')
+                answer = input(
+                    'Should the event above be marked W, R or N? (W, R, N): ')
                 if answer == 'W':
-                    worthyTime += deltaTime;
+                    worthyTime += deltaTime
                     break
                 elif answer == 'R':
-                    restTime += deltaTime;
+                    restTime += deltaTime
                     break
                 elif answer == 'N':
                     break
                 else:
-                    print('Unrecognized output: type W for worthy, R for rest, or N for neither')
+                    print(
+                        'Unrecognized output: type W for worthy, R for rest, or N for neither')
 
     worthyString = timeDeltaToString(worthyTime)
     restString = timeDeltaToString(restTime)
@@ -115,6 +121,7 @@ def parseFile(filename):
 
     # Save to SQLite3 Database
     saveToDB(worthyString, restString)
+
 
 def main():
     if len(argv) == 1:
@@ -128,6 +135,7 @@ def main():
         quit()
 
     parseFile(argv[1])
+
 
 if __name__ == '__main__':
     main()
