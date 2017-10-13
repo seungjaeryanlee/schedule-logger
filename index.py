@@ -19,7 +19,7 @@ with open('neither.regex') as file:
 
 def timeDeltaToString(td):
     return str(td.seconds // 3600).zfill(2) + ':' + \
-        str((td.seconds // 60) % 60).zfill(2);
+        str((td.seconds // 60) % 60).zfill(2)
 
 
 def parseActions(actions):
