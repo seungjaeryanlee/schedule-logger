@@ -7,45 +7,45 @@ from datetime import timedelta
 
 # Get Regex
 with open('worthy.regex') as file:
-    wRegex = file.readlines()
-    wRegex = [regex.strip() for regex in wRegex]
+    WORTHY_REGEX = file.readlines()
+    WORTHY_REGEX = [regex.strip() for regex in WORTHY_REGEX]
 with open('rest.regex') as file:
-    rRegex = file.readlines()
-    rRegex = [regex.strip() for regex in rRegex]
+    REST_REGEX = file.readlines()
+    REST_REGEX = [regex.strip() for regex in REST_REGEX]
 with open('neither.regex') as file:
-    nRegex = file.readlines()
-    nRegex = [regex.strip() for regex in nRegex]
+    NEITHER_REGEX = file.readlines()
+    NEITHER_REGEX = [regex.strip() for regex in NEITHER_REGEX]
 
 
-def timeDeltaToString(td):
+def timedelta_to_string(td):
     return str(td.seconds // 3600).zfill(2) + ':' + \
         str((td.seconds // 60) % 60).zfill(2)
 
 
-def logUnclassified(line):
+def log_unclassified(line):
     with open('unclassified.log', 'a+') as log:
         log.write(line + '\n')
 
-def parseActions(line, actions):
-    for regex in wRegex:
+def parse_actions(line, actions):
+    for regex in WORTHY_REGEX:
         for action in actions:
             if re.search(regex, action):
                 return 'W'
 
-    for regex in nRegex:
+    for regex in NEITHER_REGEX:
         for action in actions:
             if re.search(regex, action):
                 return 'N'
 
-    for regex in rRegex:
+    for regex in REST_REGEX:
         for action in actions:
             if re.search(regex, action):
                 return 'R'
 
-    logUnclassified(line)
+    log_unclassified(line)
     return 'X'
 
-def saveToDB(worthyString, restString):
+def save_to_db(worthy_str, rest_str):
     if not os.path.exists('db.sqlite3'):
         # Create DB
         conn = sqlite3.connect('db.sqlite3')
@@ -57,7 +57,7 @@ def saveToDB(worthyString, restString):
         cursor = conn.cursor()
 
     # Insert Data
-    cursor.execute('INSERT INTO day VALUES (?, ?)', [worthyString, restString])
+    cursor.execute('INSERT INTO day VALUES (?, ?)', [worthy_str, rest_str])
 
     conn.commit()
     conn.close()
@@ -65,34 +65,34 @@ def saveToDB(worthyString, restString):
     print('Saved to database.')
 
 
-def parseFile(filename):
+def parse_file(filename):
     # Get Data
-    with open(filename, encoding='utf-8') as file:
-        lines = file.readlines()
+    with open(filename, encoding='utf-8') as input_file:
+        lines = input_file.readlines()
         lines = [line.strip() for line in lines]
         lines = [line for line in lines if line[0] != '#']
 
     # Parse
-    previousTime = timedelta(0)
-    worthyTime = timedelta(0)
-    restTime = timedelta(0)
+    previous_time = timedelta(0)
+    worthy_time = timedelta(0)
+    rest_time = timedelta(0)
     for line in lines:
         tokens = line.split('/')
         tokens = [token.strip() for token in tokens]
 
         # Parse Time and Calculte Delta
         hour, minute = tokens[0].split(':')
-        thisTime = timedelta(hours=int(hour), minutes=int(minute))
-        deltaTime = thisTime - previousTime
-        previousTime = thisTime
+        this_time = timedelta(hours=int(hour), minutes=int(minute))
+        delta_time = this_time - previous_time
+        previous_time = this_time
         tokens.pop(0)
 
         # Parse tokens
-        result = parseActions(line, tokens)
+        result = parse_actions(line, tokens)
         if result == 'W':
-            worthyTime += deltaTime
+            worthy_time += delta_time
         elif result == 'R':
-            restTime += deltaTime
+            rest_time += delta_time
         elif result == 'N':
             pass
         else:
@@ -102,10 +102,10 @@ def parseFile(filename):
                 answer = input(
                     'Should the event above be marked W, R or N? (W, R, N): ')
                 if answer == 'W':
-                    worthyTime += deltaTime
+                    worthy_time += delta_time
                     break
                 elif answer == 'R':
-                    restTime += deltaTime
+                    rest_time += delta_time
                     break
                 elif answer == 'N':
                     break
@@ -113,14 +113,14 @@ def parseFile(filename):
                     print(
                         'Unrecognized output: type W for worthy, R for rest, or N for neither')
 
-    worthyString = timeDeltaToString(worthyTime)
-    restString = timeDeltaToString(restTime)
+    worthy_str = timedelta_to_string(worthy_time)
+    rest_str = timedelta_to_string(rest_time)
 
-    print('Worthy : ' + worthyString)
-    print('Rest   : ' + restString)
+    print('Worthy : ' + worthy_str)
+    print('Rest   : ' + rest_str)
 
     # Save to SQLite3 Database
-    saveToDB(worthyString, restString)
+    save_to_db(worthy_str, rest_str)
 
 
 def main():
@@ -134,7 +134,7 @@ def main():
         print('No such file exists')
         quit()
 
-    parseFile(argv[1])
+    parse_file(argv[1])
 
 
 if __name__ == '__main__':
