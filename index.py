@@ -135,8 +135,10 @@ def parse_file(filename):
                 elif answer == 'N':
                     break
                 else:
-                    print(
-                        'Unrecognized output: type W for worthy, R for rest, or N for neither')
+                    print((
+                        'Unrecognized output: type W for worthy, R for rest,'
+                        ' or N for neither'
+                    ))
 
     worthy_str = timedelta_to_string(worthy_time)
     rest_str = timedelta_to_string(rest_time)
