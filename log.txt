@@ -5,3 +5,5 @@
 8:00  Check Email
 9:00  Rest (Surf Internet) / Rest (Music)
 12:00 Work
+~
+1:00  Update Resume
