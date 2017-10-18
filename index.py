@@ -103,16 +103,19 @@ def parse_file(filename):
     worthy_time = timedelta(0)
     rest_time = timedelta(0)
     for line in lines:
-        tokens = line.split('/')
-        tokens = [token.strip() for token in tokens]
+        # Parse time
+        time_str = line[0:5].strip()
+        this_time = get_timedelta_from_string(time_str)
 
-        # Parse Time and Calculte Delta
-        this_time = get_timedelta_from_string(tokens[0])
+        # Calculate timedelta
         delta_time = this_time - previous_time
         previous_time = this_time
-        tokens.pop(0)
 
-        # Parse tokens
+        # Parse actions
+        tokens = line[5:].split('/')
+        tokens = [token.strip() for token in tokens]
+
+        # Classify actions
         result = parse_actions(line, tokens)
         if result == 'W':
             worthy_time += delta_time
