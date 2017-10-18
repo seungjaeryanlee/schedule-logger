@@ -28,6 +28,12 @@ def timedelta_to_string(td):
     return str(td.seconds // 3600).zfill(2) + ':' + \
         str((td.seconds // 60) % 60).zfill(2)
 
+def get_timedelta_from_string(string):
+    """
+    Return timedelta from HH:MM formatted string
+    """
+    hour, minute = string.split(':')
+    return timedelta(hours=int(hour), minutes=int(minute))
 
 def log_unclassified(line):
     """
@@ -82,7 +88,6 @@ def save_to_db(worthy_str, rest_str):
 
     print('Saved to database.')
 
-
 def parse_file(filename):
     """
     Parse a file with given filename to classify activities.
@@ -102,8 +107,7 @@ def parse_file(filename):
         tokens = [token.strip() for token in tokens]
 
         # Parse Time and Calculte Delta
-        hour, minute = tokens[0].split(':')
-        this_time = timedelta(hours=int(hour), minutes=int(minute))
+        this_time = get_timedelta_from_string(tokens[0])
         delta_time = this_time - previous_time
         previous_time = this_time
         tokens.pop(0)
