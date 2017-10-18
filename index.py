@@ -102,7 +102,15 @@ def parse_file(filename):
     previous_time = timedelta(0)
     worthy_time = timedelta(0)
     rest_time = timedelta(0)
+    # Whether the time is after 12:59 and should be converted to 24-hour format
+    is_pm = False
+
     for line in lines:
+        # Check if the line is a PM token ('~')
+        if line[0] == '~':
+            is_pm = True
+            continue
+
         # Parse time
         time_str = line[0:5].strip()
         this_time = get_timedelta_from_string(time_str)
@@ -110,6 +118,10 @@ def parse_file(filename):
         # Calculate timedelta
         delta_time = this_time - previous_time
         previous_time = this_time
+
+        # If after 12:59, add 12 hours to make it 24-hour format
+        if is_pm:
+            delta_time += timedelta(hours=12)
 
         # Parse actions
         tokens = line[5:].split('/')
