@@ -1,5 +1,7 @@
 # This is an example log.
-1:00 / Something
-2:00 / Another Thing / With More
-3:30 / Great Things
-10:00 / Sleep
+7:00  Sleep
+7:15  Shower
+7:45  Eat
+8:00  Check Email
+9:00  Rest (Surf Internet) / Rest (Music)
+12:00 Work
