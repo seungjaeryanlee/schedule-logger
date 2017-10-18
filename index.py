@@ -21,12 +21,12 @@ with open('neither.regex') as file:
     NEITHER_REGEX = [regex.strip() for regex in NEITHER_REGEX]
 
 
-def timedelta_to_string(td):
+def timedelta_to_string(time):
     """
     Returns HH:MM format string from given timedelta
     """
-    return str(td.seconds // 3600).zfill(2) + ':' + \
-        str((td.seconds // 60) % 60).zfill(2)
+    return str(time.seconds // 3600).zfill(2) + ':' + \
+        str((time.seconds // 60) % 60).zfill(2)
 
 def get_timedelta_from_string(string):
     """
