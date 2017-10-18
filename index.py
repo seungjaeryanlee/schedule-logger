@@ -66,22 +66,24 @@ def parse_actions(line, actions):
     log_unclassified(line)
     return 'X'
 
-def save_to_db(worthy_str, rest_str):
+def save_to_db(date_str, worthy_str, rest_str):
     """
-    Save given worthy_str and rest_str to a SQLite 3 database.
+    Save given date_str, worthy_str and rest_str to a SQLite 3 database.
     """
     if not os.path.exists('db.sqlite3'):
         # Create DB
         conn = sqlite3.connect('db.sqlite3')
         cursor = conn.cursor()
-        cursor.execute('CREATE TABLE day (worthy text, rest text)')
+        cursor.execute(
+            'CREATE TABLE record (date_str text, worthy text, rest text)')
         print('Created new database.')
     else:
         conn = sqlite3.connect('db.sqlite3')
         cursor = conn.cursor()
 
     # Insert Data
-    cursor.execute('INSERT INTO day VALUES (?, ?)', [worthy_str, rest_str])
+    cursor.execute('INSERT INTO record VALUES (?, ?, ?)'
+                   , [date_str, worthy_str, rest_str])
 
     conn.commit()
     conn.close()
@@ -98,12 +100,15 @@ def parse_file(filename):
         lines = [line.strip() for line in lines]
         lines = [line for line in lines if line[0] != '#']
 
+    date_str = input('What is the date (YYYY-MM-DD)?')
+
     # Parse
     previous_time = timedelta(0)
     worthy_time = timedelta(0)
     rest_time = timedelta(0)
     # Whether the time is after 12:59 and should be converted to 24-hour format
     is_pm = False
+
 
     for line in lines:
         # Check if the line is a PM token ('~')
@@ -162,8 +167,7 @@ def parse_file(filename):
     print('Rest   : ' + rest_str)
 
     # Save to SQLite3 Database
-    save_to_db(worthy_str, rest_str)
-
+    save_to_db(date_str, worthy_str, rest_str)
 
 def main():
     """
