@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+This module parses a formatted file of activities throughout the day and
+classifies each time partition as Worthy, Rest or Neither.
+"""
 import os.path
 import re
 import sqlite3
@@ -18,15 +22,26 @@ with open('neither.regex') as file:
 
 
 def timedelta_to_string(td):
+    """
+    Returns HH:MM format string from given timedelta
+    """
     return str(td.seconds // 3600).zfill(2) + ':' + \
         str((td.seconds // 60) % 60).zfill(2)
 
 
 def log_unclassified(line):
+    """
+    Appends given line to a log for later review
+    """
     with open('unclassified.log', 'a+') as log:
         log.write(line + '\n')
 
 def parse_actions(line, actions):
+    """
+    Return 'W' (Worthy), 'N' (Neither), 'R' (Rest), 'X' (Unclassified) after
+    classifying given actions with regex. If 'X' (Unclassified), the line is
+    logged for review.
+    """
     for regex in WORTHY_REGEX:
         for action in actions:
             if re.search(regex, action):
@@ -46,6 +61,9 @@ def parse_actions(line, actions):
     return 'X'
 
 def save_to_db(worthy_str, rest_str):
+    """
+    Save given worthy_str and rest_str to a SQLite 3 database.
+    """
     if not os.path.exists('db.sqlite3'):
         # Create DB
         conn = sqlite3.connect('db.sqlite3')
@@ -66,6 +84,9 @@ def save_to_db(worthy_str, rest_str):
 
 
 def parse_file(filename):
+    """
+    Parse a file with given filename to classify activities.
+    """
     # Get Data
     with open(filename, encoding='utf-8') as input_file:
         lines = input_file.readlines()
@@ -124,6 +145,9 @@ def parse_file(filename):
 
 
 def main():
+    """
+    Only run when this module is run directly
+    """
     if len(argv) == 1:
         print('No argument specified.')
         quit()
