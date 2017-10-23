@@ -19,6 +19,12 @@ with open('neither.regex') as file:
     NEITHER_REGEX = file.readlines()
     NEITHER_REGEX = [regex.strip() for regex in NEITHER_REGEX]
 
+def _timedelta_to_minutes(time):
+    """
+    Translates given timedelta to minutes and returns it
+    """
+    return time.seconds // 60
+
 def _timedelta_to_string(time):
     """
     Returns HH:MM format string from given timedelta
@@ -90,6 +96,17 @@ def _save_to_db(date_str, worthy_str, rest_str, neither_str):
 
     print('Saved to database.')
 
+def _update_dict(dictionary, key, time):
+    """
+    Given dictionary of action (string) keys and duration (int) values,
+    creates new key value pair in if key does not exist, otherwise increments
+    value of given key.
+    """
+    if key in dictionary:
+        dictionary[key] += _timedelta_to_minutes(time)
+    else:
+        dictionary[key] = _timedelta_to_minutes(time)
+
 def parse_file(filename):
     """
     Parse a file with given filename to classify activities.
@@ -102,11 +119,17 @@ def parse_file(filename):
 
     date_str = input('What is the date (YYYY-MM-DD)?')
 
-    # Parse
+    # Total time
     previous_time = timedelta(0)
     worthy_time = timedelta(0)
     rest_time = timedelta(0)
     neither_time = timedelta(0)
+
+    # Dictionary of Actions
+    worthy_dict = {}
+    rest_dict = {}
+    neither_dict = {}
+
     # Whether the time is after 12:59 and should be converted to 24-hour format
     is_pm = False
 
@@ -137,10 +160,13 @@ def parse_file(filename):
         result = _parse_actions(line, tokens)
         if result == 'W':
             worthy_time += delta_time
+            _update_dict(worthy_dict, line[5:], delta_time)
         elif result == 'R':
             rest_time += delta_time
+            _update_dict(rest_dict, line[5:], delta_time)
         elif result == 'N':
             neither_time += delta_time
+            _update_dict(neither_dict, line[5:], delta_time)
         else:
             # Ask user
             while True:
@@ -149,12 +175,15 @@ def parse_file(filename):
                     'Should the event above be marked W, R or N? (W, R, N): ')
                 if answer == 'W':
                     worthy_time += delta_time
+                    _update_dict(worthy_dict, line[5:], delta_time)
                     break
                 elif answer == 'R':
                     rest_time += delta_time
+                    _update_dict(rest_dict, line[5:], delta_time)
                     break
                 elif answer == 'N':
                     neither_time = delta_time
+                    _update_dict(neither_dict, line[5:], delta_time)
                     break
                 else:
                     print((
@@ -173,23 +202,25 @@ def parse_file(filename):
     # Save to SQLite3 Database
     _save_to_db(date_str, worthy_str, rest_str, neither_str)
 
-    # TODO Dummy Data
+    # Format data
+    summary = [
+        {'label': 'Worthy', 'duration': _timedelta_to_minutes(worthy_time)},
+        {'label': 'Rest', 'duration': _timedelta_to_minutes(rest_time)},
+        {'label': 'Neither', 'duration': _timedelta_to_minutes(neither_time)}
+    ]
+
+    # Get sorted lists from dictionaries
+    worthy_list = [{'label': k, 'duration': worthy_dict[k]} for k \
+        in sorted(worthy_dict, key=worthy_dict.get, reverse=True)]
+    rest_list = [{'label': k, 'duration': rest_dict[k]} for k \
+        in sorted(rest_dict, key=rest_dict.get, reverse=True)]
+    neither_list = [{'label': k, 'duration': neither_dict[k]} for k \
+        in sorted(neither_dict, key=neither_dict.get, reverse=True)]
+
     return {
         'date': date_str,
-        'summary': [
-            {'label': 'Worthy', 'duration': '540'},
-            {'label': 'Rest', 'duration': '180'},
-            {'label': 'Neither', 'duration': '480'}
-        ],
-        'worthy_list': [
-            {'label': 'Something', 'duration': '330'},
-            {'label': 'More Something', 'duration': '210'}
-        ],
-        'rest_list': [
-            {'label': 'Another', 'duration': '90'},
-            {'label': 'and More', 'duration': '90'}
-        ],
-        'neither_list': [
-            {'label': 'Sleep', 'duration': '480'}
-        ]
+        'summary': summary,
+        'worthy_list': worthy_list,
+        'rest_list': rest_list,
+        'neither_list': neither_list
     }
