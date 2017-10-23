@@ -24,7 +24,7 @@
                     </tr>
                     {% for worthy_action in worthy_list %}
                     <tr>
-                        <td class="action">{{ worthy_action['action'] }}</td>
+                        <td class="action">{{ worthy_action['label'] }}</td>
                         <td class="duration">{{ worthy_action['duration'] }}</td>
                     </tr>
                     {% endfor %}
@@ -40,7 +40,7 @@
                     </tr>
                     {% for rest_action in rest_list %}
                     <tr>
-                        <td class="action">{{ rest_action['action'] }}</td>
+                        <td class="action">{{ rest_action['label'] }}</td>
                         <td class="duration">{{ rest_action['duration'] }}</td>
                     </tr>
                     {% endfor %}
@@ -56,8 +56,8 @@
                     </tr>
                     {% for neither_action in neither_list %}
                     <tr>
-                        <td class="action">{{ worthy_action['action'] }}</td>
-                        <td class="duration">{{ worthy_action['duration'] }}</td>
+                        <td class="action">{{ neither_action['label'] }}</td>
+                        <td class="duration">{{ neither_action['duration'] }}</td>
                     </tr>
                     {% endfor %}
                 </table>
