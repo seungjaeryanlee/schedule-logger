@@ -9,6 +9,7 @@ import sqlite3
 from sys import argv
 from datetime import timedelta
 
+from plot import create_plots
 from report import create_report
 
 # Get Regex
@@ -186,6 +187,7 @@ def main():
         quit()
 
     parse_file(argv[1])
+    create_plots({'daily': [33.3, 33.3, 33.4]})
     create_report({'message': 'Hello World!'})
 
 
