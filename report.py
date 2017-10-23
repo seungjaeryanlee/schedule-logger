@@ -19,6 +19,10 @@ def create_report(report_data):
     Creates a report.html file in report/ directory using the template and
     given data.
     """
+    # Create report/ directory if it doesn't exist
+    if not os.path.exists('report/'):
+        os.makedirs('report/')
+
     output_file = 'report/report.html'
     with open(output_file, 'w') as output:
         html = _render_template('template.html', report_data)
