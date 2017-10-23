@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
 This module parses a formatted file of activities throughout the day and
 classifies each time partition as Worthy, Rest or Neither.
