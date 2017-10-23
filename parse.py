@@ -19,28 +19,28 @@ with open('neither.regex') as file:
     NEITHER_REGEX = file.readlines()
     NEITHER_REGEX = [regex.strip() for regex in NEITHER_REGEX]
 
-def timedelta_to_string(time):
+def _timedelta_to_string(time):
     """
     Returns HH:MM format string from given timedelta
     """
     return str(time.seconds // 3600).zfill(2) + ':' + \
         str((time.seconds // 60) % 60).zfill(2)
 
-def get_timedelta_from_string(string):
+def _get_timedelta_from_string(string):
     """
     Return timedelta from HH:MM formatted string
     """
     hour, minute = string.split(':')
     return timedelta(hours=int(hour), minutes=int(minute))
 
-def log_unclassified(line):
+def _log_unclassified(line):
     """
     Appends given line to a log for later review
     """
     with open('unclassified.log', 'a+') as log:
         log.write(line + '\n')
 
-def parse_actions(line, actions):
+def _parse_actions(line, actions):
     """
     Return 'W' (Worthy), 'N' (Neither), 'R' (Rest), 'X' (Unclassified) after
     classifying given actions with regex. If 'X' (Unclassified), the line is
@@ -61,10 +61,10 @@ def parse_actions(line, actions):
             if re.search(regex, action):
                 return 'R'
 
-    log_unclassified(line)
+    _log_unclassified(line)
     return 'X'
 
-def save_to_db(date_str, worthy_str, rest_str):
+def _save_to_db(date_str, worthy_str, rest_str):
     """
     Save given date_str, worthy_str and rest_str to a SQLite 3 database.
     """
@@ -116,7 +116,7 @@ def parse_file(filename):
 
         # Parse time
         time_str = line[0:5].strip()
-        this_time = get_timedelta_from_string(time_str)
+        this_time = _get_timedelta_from_string(time_str)
 
         # Calculate timedelta
         delta_time = this_time - previous_time
@@ -131,7 +131,7 @@ def parse_file(filename):
         tokens = [token.strip() for token in tokens]
 
         # Classify actions
-        result = parse_actions(line, tokens)
+        result = _parse_actions(line, tokens)
         if result == 'W':
             worthy_time += delta_time
         elif result == 'R':
@@ -158,11 +158,11 @@ def parse_file(filename):
                         ' or N for neither'
                     ))
 
-    worthy_str = timedelta_to_string(worthy_time)
-    rest_str = timedelta_to_string(rest_time)
+    worthy_str = _timedelta_to_string(worthy_time)
+    rest_str = _timedelta_to_string(rest_time)
 
     print('Worthy : ' + worthy_str)
     print('Rest   : ' + rest_str)
 
     # Save to SQLite3 Database
-    save_to_db(date_str, worthy_str, rest_str)
+    _save_to_db(date_str, worthy_str, rest_str)
