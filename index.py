@@ -187,8 +187,29 @@ def main():
         quit()
 
     parse_file(argv[1])
-    create_plots({'daily': [33.3, 33.3, 33.4]})
-    create_report({'message': 'Hello World!'})
+    # TODO Dummy Data
+    data = {
+        'title': 'Daily Report',
+        'date': 'Unknown',
+        'summary': [
+            {'label': 'Worthy', 'duration': '540'},
+            {'label': 'Rest', 'duration': '180'},
+            {'label': 'Neither', 'duration': '480'}
+        ],
+        'worthy_list': [
+            {'label': 'Something', 'duration': '330'},
+            {'label': 'More Something', 'duration': '210'}
+        ],
+        'rest_list': [
+            {'label': 'Another', 'duration': '90'},
+            {'label': 'and More', 'duration': '90'}
+        ],
+        'neither_list': [
+            {'label': 'Sleep', 'duration': '480'}
+        ]
+    }
+    create_plots(data)
+    create_report(data)
 
 
 if __name__ == '__main__':

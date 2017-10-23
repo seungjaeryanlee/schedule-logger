@@ -4,7 +4,8 @@ neither.regex
 rest.regex
 db.sqlite3
 unclassified.log
-report/
+report/*.png
+report/*.html
 
 ###############################################################################
 

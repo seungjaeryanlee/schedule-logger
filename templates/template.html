@@ -1,9 +1,68 @@
 <!doctype html>
 <html>
 <head>
-    <title>Report</title>
+    <title>Daily Report</title>
+    <link rel="stylesheet" href="report.css">
 </head>
 <body>
-    <h1>{{ message }}</h1>
+    <div class="report">
+        <h1 class="title">{{ title }}</h1>
+        <h3 class="date">{{ date }}</h3>
+        <div class="summary">
+            <h3 class="section-title">Summary</h3>
+            <img src="daily_pie.png">
+        </div>
+        <div class="details">
+            <h2 class="section-title">Details</h2>
+            <div class="details-worthy">
+                <h3>Worthy</h3>
+                <img src="worthy_pie.png">
+                <table class="worthy-list">
+                    <tr>
+                        <th>Action</th>
+                        <th>Duration</th>
+                    </tr>
+                    {% for worthy_action in worthy_list %}
+                    <tr>
+                        <td class="action">{{ worthy_action['label'] }}</td>
+                        <td class="duration">{{ worthy_action['duration'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="details-rest">
+                <h3>Rest</h3>
+                <img src="rest_pie.png">
+                <table class="rest-list">
+                    <tr>
+                        <th>Action</th>
+                        <th>Duration</th>
+                    </tr>
+                    {% for rest_action in rest_list %}
+                    <tr>
+                        <td class="action">{{ rest_action['label'] }}</td>
+                        <td class="duration">{{ rest_action['duration'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="details-neither">
+                <h3>Neither</h3>
+                <img src="neither_pie.png">
+                <table class="neither-list">
+                    <tr>
+                        <th>Action</th>
+                        <th>Duration</th>
+                    </tr>
+                    {% for neither_action in neither_list %}
+                    <tr>
+                        <td class="action">{{ neither_action['label'] }}</td>
+                        <td class="duration">{{ neither_action['duration'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
