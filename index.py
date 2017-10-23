@@ -191,9 +191,14 @@ def main():
     data = {
         'title': 'Daily Report',
         'date': 'Unknown',
+        'summary': [
+            {'label': 'Worthy', 'duration': '540'},
+            {'label': 'Rest', 'duration': '0'},
+            {'label': 'Neither', 'duration': '0'}
+        ],
         'worthy_list': [
-            {'action': 'Something', 'duration': '330'},
-            {'action': 'More Something', 'duration': '210'}
+            {'label': 'Something', 'duration': '330'},
+            {'label': 'More Something', 'duration': '210'}
         ],
         'rest_list': [],
         'neither_list': []

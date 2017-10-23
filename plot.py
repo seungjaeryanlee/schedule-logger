@@ -10,7 +10,7 @@ def pie_chart(filename, actions_list):
     given filename.
     """
     # The slices will be ordered and plotted counter-clockwise
-    labels = [action['action'] for action in actions_list]
+    labels = [action['label'] for action in actions_list]
     sizes = [action['duration'] for action in actions_list]
 
     _, ax1 = pyplot.subplots()
@@ -26,4 +26,7 @@ def create_plots(plot_data):
     """
     Create plots based on the given plot_data.
     """
-    pie_chart(filename='daily_pie', actions_list=plot_data['worthy_list'])
+    pie_chart(filename='daily_pie', actions_list=plot_data['summary'])
+    pie_chart(filename='worthy_pie', actions_list=plot_data['worthy_list'])
+    pie_chart(filename='rest_pie', actions_list=plot_data['rest_list'])
+    pie_chart(filename='neither_pie', actions_list=plot_data['neither_list'])
