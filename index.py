@@ -188,7 +188,7 @@ def main():
 
     parse_file(argv[1])
     create_plots({'daily': [33.3, 33.3, 33.4]})
-    create_report({'message': 'Hello World!'})
+    create_report({'title': 'Daily Report', 'date': 'Unknown'})
 
 
 if __name__ == '__main__':
