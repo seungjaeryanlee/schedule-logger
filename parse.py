@@ -166,3 +166,25 @@ def parse_file(filename):
 
     # Save to SQLite3 Database
     _save_to_db(date_str, worthy_str, rest_str)
+
+    # TODO Dummy Data
+    return {
+        'title': 'Daily Report',
+        'date': 'Unknown',
+        'summary': [
+            {'label': 'Worthy', 'duration': '540'},
+            {'label': 'Rest', 'duration': '180'},
+            {'label': 'Neither', 'duration': '480'}
+        ],
+        'worthy_list': [
+            {'label': 'Something', 'duration': '330'},
+            {'label': 'More Something', 'duration': '210'}
+        ],
+        'rest_list': [
+            {'label': 'Another', 'duration': '90'},
+            {'label': 'and More', 'duration': '90'}
+        ],
+        'neither_list': [
+            {'label': 'Sleep', 'duration': '480'}
+        ]
+    }

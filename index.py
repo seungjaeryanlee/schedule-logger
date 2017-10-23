@@ -25,28 +25,7 @@ def main():
         print('No such file exists')
         quit()
 
-    parse_file(argv[1])
-    # TODO Dummy Data
-    data = {
-        'title': 'Daily Report',
-        'date': 'Unknown',
-        'summary': [
-            {'label': 'Worthy', 'duration': '540'},
-            {'label': 'Rest', 'duration': '180'},
-            {'label': 'Neither', 'duration': '480'}
-        ],
-        'worthy_list': [
-            {'label': 'Something', 'duration': '330'},
-            {'label': 'More Something', 'duration': '210'}
-        ],
-        'rest_list': [
-            {'label': 'Another', 'duration': '90'},
-            {'label': 'and More', 'duration': '90'}
-        ],
-        'neither_list': [
-            {'label': 'Sleep', 'duration': '480'}
-        ]
-    }
+    data = parse_file(argv[1])
     create_plots(data)
     create_report(data)
 
