@@ -1,0 +1,26 @@
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    text-align: center;
+}
+.title {
+    margin-bottom: 0px;
+}
+.date {
+    margin-top: 5px;
+}
+
+/* Images */
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Tables */
+table {
+    margin-left: auto;
+    margin-right: auto;
+}
+th, td {
+    text-align: center;
+}
