@@ -9,9 +9,55 @@
         <h3 class="date">{{ date }}</h3>
         <div class="summary">
             <h3 class="section-title"></h3>
+            <img src="daily_pie.png">
         </div>
         <div class="details">
             <h3 class="section-title"></h3>
+            <div class="details-worthy">
+                <img src="worthy_pie.png">
+                <table class="worthy-list">
+                    <tr>
+                        <th>Action</th>
+                        <th>Duration</th>
+                    </tr>
+                    {% for worthy_action in worthy_list %}
+                    <tr>
+                        <td class="action">{{ worthy_action['action'] }}</td>
+                        <td class="duration">{{ worthy_action['duration'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="details-rest">
+                <img src="rest_pie.png">
+                <table class="rest-list">
+                    <tr>
+                        <th>Action</th>
+                        <th>Duration</th>
+                    </tr>
+                    {% for rest_action in rest_list %}
+                    <tr>
+                        <td class="action">{{ rest_action['action'] }}</td>
+                        <td class="duration">{{ rest_action['duration'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="details-neither">
+                <img src="neither_pie.png">
+                <table class="neither-list">
+                    <tr>
+                        <th>Action</th>
+                        <th>Duration</th>
+                    </tr>
+                    {% for neither_action in neither_list %}
+                    <tr>
+                        <td class="action">{{ worthy_action['action'] }}</td>
+                        <td class="duration">{{ worthy_action['duration'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
     </div>
 </body>

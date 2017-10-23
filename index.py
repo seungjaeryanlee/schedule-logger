@@ -188,7 +188,17 @@ def main():
 
     parse_file(argv[1])
     create_plots({'daily': [33.3, 33.3, 33.4]})
-    create_report({'title': 'Daily Report', 'date': 'Unknown'})
+    # TODO Dummy Data
+    create_report({
+        'title': 'Daily Report',
+        'date': 'Unknown',
+        'worthy_list': [
+            {'action': 'Something', 'duration': '5:30'},
+            {'action': 'More Something', 'duration': '3:30'}
+        ],
+        'rest_list': [],
+        'neither_list': []
+    })
 
 
 if __name__ == '__main__':
