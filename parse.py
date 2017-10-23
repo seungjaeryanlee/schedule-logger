@@ -64,24 +64,26 @@ def _parse_actions(line, actions):
     _log_unclassified(line)
     return 'X'
 
-def _save_to_db(date_str, worthy_str, rest_str):
+def _save_to_db(date_str, worthy_str, rest_str, neither_str):
     """
-    Save given date_str, worthy_str and rest_str to a SQLite 3 database.
+    Save given date_str, worthy_str, rest_str and neither_str to a SQLite 3
+    database.
     """
     if not os.path.exists('db.sqlite3'):
         # Create DB
         conn = sqlite3.connect('db.sqlite3')
         cursor = conn.cursor()
-        cursor.execute(
-            'CREATE TABLE record (date_str text, worthy text, rest text)')
+        cursor.execute((
+            'CREATE TABLE record (date_str text, worthy text'
+            ', rest text, neither text)'))
         print('Created new database.')
     else:
         conn = sqlite3.connect('db.sqlite3')
         cursor = conn.cursor()
 
     # Insert Data
-    cursor.execute('INSERT INTO record VALUES (?, ?, ?)'
-                   , [date_str, worthy_str, rest_str])
+    cursor.execute('INSERT INTO record VALUES (?, ?, ?, ?)'
+                   , [date_str, worthy_str, rest_str, neither_str])
 
     conn.commit()
     conn.close()
@@ -104,6 +106,7 @@ def parse_file(filename):
     previous_time = timedelta(0)
     worthy_time = timedelta(0)
     rest_time = timedelta(0)
+    neither_time = timedelta(0)
     # Whether the time is after 12:59 and should be converted to 24-hour format
     is_pm = False
 
@@ -137,7 +140,7 @@ def parse_file(filename):
         elif result == 'R':
             rest_time += delta_time
         elif result == 'N':
-            pass
+            neither_time += delta_time
         else:
             # Ask user
             while True:
@@ -151,6 +154,7 @@ def parse_file(filename):
                     rest_time += delta_time
                     break
                 elif answer == 'N':
+                    neither_time = delta_time
                     break
                 else:
                     print((
@@ -160,12 +164,14 @@ def parse_file(filename):
 
     worthy_str = _timedelta_to_string(worthy_time)
     rest_str = _timedelta_to_string(rest_time)
+    neither_str = _timedelta_to_string(neither_time)
 
-    print('Worthy : ' + worthy_str)
-    print('Rest   : ' + rest_str)
+    print('Worthy  : ' + worthy_str)
+    print('Rest    : ' + rest_str)
+    print('Neither : ' + neither_str)
 
     # Save to SQLite3 Database
-    _save_to_db(date_str, worthy_str, rest_str)
+    _save_to_db(date_str, worthy_str, rest_str, neither_str)
 
     # TODO Dummy Data
     return {
