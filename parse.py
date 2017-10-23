@@ -160,13 +160,13 @@ def parse_file(filename):
         result = _parse_actions(line, tokens)
         if result == 'W':
             worthy_time += delta_time
-            _update_dict(worthy_dict, line, delta_time)
+            _update_dict(worthy_dict, line[5:], delta_time)
         elif result == 'R':
             rest_time += delta_time
-            _update_dict(rest_dict, line, delta_time)
+            _update_dict(rest_dict, line[5:], delta_time)
         elif result == 'N':
             neither_time += delta_time
-            _update_dict(neither_dict, line, delta_time)
+            _update_dict(neither_dict, line[5:], delta_time)
         else:
             # Ask user
             while True:
@@ -175,15 +175,15 @@ def parse_file(filename):
                     'Should the event above be marked W, R or N? (W, R, N): ')
                 if answer == 'W':
                     worthy_time += delta_time
-                    _update_dict(worthy_dict, line, delta_time)
+                    _update_dict(worthy_dict, line[5:], delta_time)
                     break
                 elif answer == 'R':
                     rest_time += delta_time
-                    _update_dict(rest_dict, line, delta_time)
+                    _update_dict(rest_dict, line[5:], delta_time)
                     break
                 elif answer == 'N':
                     neither_time = delta_time
-                    _update_dict(neither_dict, line, delta_time)
+                    _update_dict(neither_dict, line[5:], delta_time)
                     break
                 else:
                     print((
