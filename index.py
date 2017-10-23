@@ -26,6 +26,8 @@ def main():
         quit()
 
     data = parse_file(argv[1])
+    data['title'] = 'Daily Report'
+
     create_plots(data)
     create_report(data)
 

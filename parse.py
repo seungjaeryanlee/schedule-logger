@@ -169,8 +169,7 @@ def parse_file(filename):
 
     # TODO Dummy Data
     return {
-        'title': 'Daily Report',
-        'date': 'Unknown',
+        'date': date_str,
         'summary': [
             {'label': 'Worthy', 'duration': '540'},
             {'label': 'Rest', 'duration': '180'},
