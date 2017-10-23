@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
 This module creates a HTML report based on the data from the parsed file.
 """
