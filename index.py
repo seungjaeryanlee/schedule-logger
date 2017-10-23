@@ -9,6 +9,8 @@ import sqlite3
 from sys import argv
 from datetime import timedelta
 
+from report import create_report
+
 # Get Regex
 with open('worthy.regex') as file:
     WORTHY_REGEX = file.readlines()
@@ -184,6 +186,7 @@ def main():
         quit()
 
     parse_file(argv[1])
+    create_report({'message': 'Hello World!'})
 
 
 if __name__ == '__main__':
