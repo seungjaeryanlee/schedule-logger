@@ -19,6 +19,12 @@ with open('neither.regex') as file:
     NEITHER_REGEX = file.readlines()
     NEITHER_REGEX = [regex.strip() for regex in NEITHER_REGEX]
 
+def _timedelta_to_minutes(time):
+    """
+    Translates given timedelta to minutes and returns it
+    """
+    return str(time.seconds // 60)
+
 def _timedelta_to_string(time):
     """
     Returns HH:MM format string from given timedelta
@@ -102,7 +108,7 @@ def parse_file(filename):
 
     date_str = input('What is the date (YYYY-MM-DD)?')
 
-    # Parse
+    # Total time
     previous_time = timedelta(0)
     worthy_time = timedelta(0)
     rest_time = timedelta(0)
@@ -173,14 +179,17 @@ def parse_file(filename):
     # Save to SQLite3 Database
     _save_to_db(date_str, worthy_str, rest_str, neither_str)
 
+    # Format data
+    summary = [
+        {'label': 'Worthy', 'duration': _timedelta_to_minutes(worthy_time)},
+        {'label': 'Rest', 'duration': _timedelta_to_minutes(rest_time)},
+        {'label': 'Neither', 'duration': _timedelta_to_minutes(neither_time)}
+    ]
+
     # TODO Dummy Data
     return {
         'date': date_str,
-        'summary': [
-            {'label': 'Worthy', 'duration': '540'},
-            {'label': 'Rest', 'duration': '180'},
-            {'label': 'Neither', 'duration': '480'}
-        ],
+        'summary': summary,
         'worthy_list': [
             {'label': 'Something', 'duration': '330'},
             {'label': 'More Something', 'duration': '210'}
