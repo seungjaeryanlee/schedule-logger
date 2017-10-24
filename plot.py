@@ -3,6 +3,9 @@
 This module creates plots for the report using matplotlib.
 """
 from matplotlib import pyplot
+import matplotlib
+
+ALLOW_KOREAN = True
 
 def pie_chart(filename, actions_list):
     """
@@ -26,6 +29,10 @@ def create_plots(plot_data):
     """
     Create plots based on the given plot_data.
     """
+    if ALLOW_KOREAN:
+        # Use font that has Korean letters
+        matplotlib.rc('font', family='NanumGothic')
+
     pie_chart(filename='daily_pie', actions_list=plot_data['summary'])
     pie_chart(filename='worthy_pie', actions_list=plot_data['worthy_list'])
     pie_chart(filename='neither_pie', actions_list=plot_data['neither_list'])
