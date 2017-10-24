@@ -4,6 +4,6 @@
 745  Eat
 800  Check Email
 900  Rest (Surf Internet) / Rest (Music)
-1200 Work
+1200 일
 ~
 100  Update Resume
