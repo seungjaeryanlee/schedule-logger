@@ -260,7 +260,7 @@ def parse_file(filename):
                     _update_dict(worthy_dict, line[5:], delta_time)
                     break
                 elif answer == 'N':
-                    neither_time = delta_time
+                    neither_time += delta_time
                     _update_dict(neither_dict, line[5:], delta_time)
                     break
                 elif answer == 'R':
