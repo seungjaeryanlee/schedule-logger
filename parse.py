@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 This module parses a formatted file of activities throughout the day and
-classifies each time partition as Worthy, Rest or Neither.
+classifies each time partition as Worthy, Neither or Rest.
 """
 import os.path
 import re
@@ -12,12 +12,12 @@ from datetime import datetime, timedelta
 with open('worthy.regex') as file:
     WORTHY_REGEX = file.readlines()
     WORTHY_REGEX = [regex.strip() for regex in WORTHY_REGEX]
-with open('rest.regex') as file:
-    REST_REGEX = file.readlines()
-    REST_REGEX = [regex.strip() for regex in REST_REGEX]
 with open('neither.regex') as file:
     NEITHER_REGEX = file.readlines()
     NEITHER_REGEX = [regex.strip() for regex in NEITHER_REGEX]
+with open('rest.regex') as file:
+    REST_REGEX = file.readlines()
+    REST_REGEX = [regex.strip() for regex in REST_REGEX]
 
 def _timedelta_to_minutes(time):
     """
@@ -100,9 +100,9 @@ def _parse_actions(line, actions):
     return 'X'
 
 
-def _save_to_db(date_str, worthy_str, rest_str, neither_str):
+def _save_to_db(date_str, worthy_str, neither_str, rest_str):
     """
-    Save given date_str, worthy_str, rest_str and neither_str to a SQLite 3
+    Save given date_str, worthy_str, neither_str, and rest_str to a SQLite 3
     database.
     """
     if not os.path.exists('db.sqlite3'):
@@ -111,7 +111,7 @@ def _save_to_db(date_str, worthy_str, rest_str, neither_str):
         cursor = conn.cursor()
         cursor.execute((
             'CREATE TABLE record (date_str text, worthy text'
-            ', rest text, neither text)'))
+            ', neither text, rest text)'))
         print('Created new database.')
     else:
         conn = sqlite3.connect('db.sqlite3')
@@ -119,7 +119,7 @@ def _save_to_db(date_str, worthy_str, rest_str, neither_str):
 
     # Insert Data
     cursor.execute('INSERT INTO record VALUES (?, ?, ?, ?)'
-                   , [date_str, worthy_str, rest_str, neither_str])
+                   , [date_str, worthy_str, neither_str, rest_str])
 
     conn.commit()
     conn.close()
@@ -176,13 +176,13 @@ def parse_file(filename):
     # Total time
     previous_time = timedelta(0)
     worthy_time = timedelta(0)
-    rest_time = timedelta(0)
     neither_time = timedelta(0)
+    rest_time = timedelta(0)
 
     # Dictionary of Actions
     worthy_dict = {}
-    rest_dict = {}
     neither_dict = {}
+    rest_dict = {}
 
     # Whether the time is after 12:59 and should be converted to 24-hour format
     is_pm = False
@@ -215,66 +215,66 @@ def parse_file(filename):
         if result == 'W':
             worthy_time += delta_time
             _update_dict(worthy_dict, line[5:], delta_time)
-        elif result == 'R':
-            rest_time += delta_time
-            _update_dict(rest_dict, line[5:], delta_time)
         elif result == 'N':
             neither_time += delta_time
             _update_dict(neither_dict, line[5:], delta_time)
+        elif result == 'R':
+            rest_time += delta_time
+            _update_dict(rest_dict, line[5:], delta_time)
         else:
             # Ask user
             while True:
                 print(line)
                 answer = input(
-                    'Should the event above be marked W, R or N? (W, R, N): ')
+                    'Should the event above be marked W, N or R? (W, N, R): ')
                 if answer == 'W':
                     worthy_time += delta_time
                     _update_dict(worthy_dict, line[5:], delta_time)
-                    break
-                elif answer == 'R':
-                    rest_time += delta_time
-                    _update_dict(rest_dict, line[5:], delta_time)
                     break
                 elif answer == 'N':
                     neither_time = delta_time
                     _update_dict(neither_dict, line[5:], delta_time)
                     break
+                elif answer == 'R':
+                    rest_time += delta_time
+                    _update_dict(rest_dict, line[5:], delta_time)
+                    break
                 else:
                     print((
-                        'Unrecognized output: type W for worthy, R for rest,'
-                        ' or N for neither'
+                        'Unrecognized output: type W for worthy, N for neither'
+                        ', or R for rest,'
                     ))
 
     worthy_str = _timedelta_to_string(worthy_time)
-    rest_str = _timedelta_to_string(rest_time)
     neither_str = _timedelta_to_string(neither_time)
+    rest_str = _timedelta_to_string(rest_time)
 
     print('Worthy  : ' + worthy_str)
-    print('Rest    : ' + rest_str)
     print('Neither : ' + neither_str)
+    print('Rest    : ' + rest_str)
 
     # Save to SQLite3 Database
-    _save_to_db(date_str, worthy_str, rest_str, neither_str)
+    _save_to_db(date_str, worthy_str, neither_str, rest_str)
 
     # Format data
     summary = [
         {'label': 'Worthy', 'duration': _timedelta_to_minutes(worthy_time)},
-        {'label': 'Rest', 'duration': _timedelta_to_minutes(rest_time)},
-        {'label': 'Neither', 'duration': _timedelta_to_minutes(neither_time)}
+        {'label': 'Neither', 'duration': _timedelta_to_minutes(neither_time)},
+        {'label': 'Rest', 'duration': _timedelta_to_minutes(rest_time)}
     ]
 
     # Get sorted lists from dictionaries
     worthy_list = [{'label': k, 'duration': worthy_dict[k]} for k \
         in sorted(worthy_dict, key=worthy_dict.get, reverse=True)]
-    rest_list = [{'label': k, 'duration': rest_dict[k]} for k \
-        in sorted(rest_dict, key=rest_dict.get, reverse=True)]
     neither_list = [{'label': k, 'duration': neither_dict[k]} for k \
         in sorted(neither_dict, key=neither_dict.get, reverse=True)]
+    rest_list = [{'label': k, 'duration': rest_dict[k]} for k \
+        in sorted(rest_dict, key=rest_dict.get, reverse=True)]
 
     return {
         'date': date_str,
         'summary': summary,
         'worthy_list': worthy_list,
-        'rest_list': rest_list,
-        'neither_list': neither_list
+        'neither_list': neither_list,
+        'rest_list': rest_list
     }
