@@ -8,6 +8,8 @@ import re
 import sqlite3
 from datetime import datetime, timedelta
 
+TIMESTAMP_NO_COLON = True
+
 # Get Regex
 with open('worthy.regex') as file:
     WORTHY_REGEX = file.readlines()
@@ -34,9 +36,20 @@ def _timedelta_to_string(time):
 
 def _get_timedelta_from_string(string):
     """
-    Return timedelta from HH:MM formatted string
+    Return timedelta from HHMM formatted string if TIMESTAMP_NO_COLON = True,
+    or HH:MM formatted string if TIMESTAMP_NO_COLON = False
     """
-    hour, minute = string.split(':')
+
+    if TIMESTAMP_NO_COLON:
+        if len(string) == 3:
+            hour = string[0]
+            minute = string[1:3]
+        else: # len(string) == 4
+            hour = string[0:2]
+            minute = string[2:4]
+    else:
+        hour, minute = string.split(':')
+
     return timedelta(hours=int(hour), minutes=int(minute))
 
 def _log_unclassified(line):
