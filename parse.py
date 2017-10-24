@@ -51,7 +51,17 @@ def _parse_actions(line, actions):
     Return 'W' (Worthy), 'N' (Neither), 'R' (Rest), 'X' (Unclassified) after
     classifying given actions with regex. If 'X' (Unclassified), the line is
     logged for review.
+
+    The classification algorithm follows:
+    1. If there is a worthy action, the line is classified worthy.
+    2. If there is no worthy action, and there is an unclassified action, the
+       line is unclassified.
+    3. If there is no worthy action or unclassified action, if there is a
+       neither action, the line is classified neither.
+    4. If there is no worthy or unclassified or neither action, the line is
+       classified rest.
     """
+
     for regex in WORTHY_REGEX:
         for action in actions:
             if re.search(regex, action):
