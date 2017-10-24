@@ -62,23 +62,43 @@ def _parse_actions(line, actions):
        classified rest.
     """
 
-    for regex in WORTHY_REGEX:
-        for action in actions:
-            if re.search(regex, action):
-                return 'W'
+    has_worthy = False
+    has_neither = False
+    has_rest = False
+    has_unclassified = False
 
-    for regex in NEITHER_REGEX:
-        for action in actions:
+    # Check all actions and see which type of actions the line has
+    for action in actions:
+        is_classified = False
+        for regex in WORTHY_REGEX:
             if re.search(regex, action):
-                return 'N'
-
-    for regex in REST_REGEX:
-        for action in actions:
+                is_classified = True
+                has_worthy = True
+        for regex in NEITHER_REGEX:
             if re.search(regex, action):
-                return 'R'
+                is_classified = True
+                has_neither = True
+        for regex in REST_REGEX:
+            if re.search(regex, action):
+                is_classified = True
+                has_rest = True
+        if not is_classified:
+            has_unclassified = True
 
-    _log_unclassified(line)
+    # Classify line based on the actions
+    if has_worthy:
+        return 'W'
+    if has_unclassified:
+        _log_unclassified(line)
+        return 'X'
+    if has_neither:
+        return 'N'
+    if has_rest:
+        return 'R'
+
+    # Should never reach since every action is classified as one of the four
     return 'X'
+
 
 def _save_to_db(date_str, worthy_str, rest_str, neither_str):
     """
