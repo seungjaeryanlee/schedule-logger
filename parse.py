@@ -226,13 +226,13 @@ def parse_file(filename):
         time_str = line[0:5].strip()
         this_time = _get_timedelta_from_string(time_str)
 
+        # If after 12:59, add 12 hours to make it 24-hour format
+        if is_pm:
+            this_time += timedelta(hours=12)
+
         # Calculate timedelta
         delta_time = this_time - previous_time
         previous_time = this_time
-
-        # If after 12:59, add 12 hours to make it 24-hour format
-        if is_pm:
-            delta_time += timedelta(hours=12)
 
         # Parse actions
         tokens = line[5:].split('/')
@@ -260,7 +260,7 @@ def parse_file(filename):
                     _update_dict(worthy_dict, line[5:], delta_time)
                     break
                 elif answer == 'N':
-                    neither_time = delta_time
+                    neither_time += delta_time
                     _update_dict(neither_dict, line[5:], delta_time)
                     break
                 elif answer == 'R':
