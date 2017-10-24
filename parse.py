@@ -6,7 +6,7 @@ classifies each time partition as Worthy, Rest or Neither.
 import os.path
 import re
 import sqlite3
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 # Get Regex
 with open('worthy.regex') as file:
@@ -137,6 +137,27 @@ def _update_dict(dictionary, key, time):
     else:
         dictionary[key] = _timedelta_to_minutes(time)
 
+def _get_date_from_filename(filename):
+    """
+    If filename has the format YYYY-MM-DD.*, return the date string. If not,
+    return None.
+    """
+    # Ignore extension name
+    if '.' in filename:
+        date_str = filename.split('.', 1)[0]
+
+    # Check length
+    if len(date_str) != 10:
+        return None
+
+    # Check format
+    try:
+        datetime.strptime(date_str, "%Y-%m-%d")
+    except ValueError:
+        return None
+
+    return date_str
+
 def parse_file(filename):
     """
     Parse a file with given filename to classify activities.
@@ -147,7 +168,10 @@ def parse_file(filename):
         lines = [line.strip() for line in lines]
         lines = [line for line in lines if line[0] != '#']
 
-    date_str = input('What is the date (YYYY-MM-DD)?')
+    # Get Date
+    date_str = _get_date_from_filename(filename)
+    if date_str == None:
+        date_str = input('What is the date (YYYY-MM-DD)?')
 
     # Total time
     previous_time = timedelta(0)
