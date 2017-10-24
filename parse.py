@@ -150,6 +150,22 @@ def _update_dict(dictionary, key, time):
     else:
         dictionary[key] = _timedelta_to_minutes(time)
 
+def _is_date_string(string):
+    """
+    Return True if the given string is formatted YYYY-MM-DD. Returns false if
+    not.
+    """
+    # Check length
+    if len(string) != 10:
+        return False
+
+    try:
+        datetime.strptime(string, "%Y-%m-%d")
+    except ValueError:
+        return False
+
+    return True
+
 def _get_date_from_filename(filename):
     """
     If filename has the format YYYY-MM-DD.*, return the date string. If not,
@@ -159,17 +175,11 @@ def _get_date_from_filename(filename):
     if '.' in filename:
         date_str = filename.split('.', 1)[0]
 
-    # Check length
-    if len(date_str) != 10:
-        return None
-
     # Check format
-    try:
-        datetime.strptime(date_str, "%Y-%m-%d")
-    except ValueError:
+    if _is_date_string(date_str):
+        return date_str
+    else:
         return None
-
-    return date_str
 
 def parse_file(filename):
     """
@@ -184,7 +194,12 @@ def parse_file(filename):
     # Get Date
     date_str = _get_date_from_filename(filename)
     if date_str == None:
-        date_str = input('What is the date (YYYY-MM-DD)?')
+        while True:
+            date_str = input('What is the date (YYYY-MM-DD)? ')
+            if _is_date_string(date_str):
+                break
+            else:
+                print('Wrong format. Please use (YYYY-MM-DD) format.')
 
     # Total time
     previous_time = timedelta(0)
