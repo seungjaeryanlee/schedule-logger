@@ -28,5 +28,5 @@ def create_plots(plot_data):
     """
     pie_chart(filename='daily_pie', actions_list=plot_data['summary'])
     pie_chart(filename='worthy_pie', actions_list=plot_data['worthy_list'])
-    pie_chart(filename='rest_pie', actions_list=plot_data['rest_list'])
     pie_chart(filename='neither_pie', actions_list=plot_data['neither_list'])
+    pie_chart(filename='rest_pie', actions_list=plot_data['rest_list'])
