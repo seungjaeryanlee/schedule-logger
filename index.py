@@ -11,6 +11,17 @@ from parse import parse_file
 from plot import create_plots
 from report import create_report
 
+def minutes_to_string(minutes):
+    """
+    Returns '0h', '0m' or '0h 0m' formatted string from given minutes (int).
+    """
+    if minutes // 60 == 0:
+        return str(minutes % 60) + 'm'
+    elif minutes % 60 == 0:
+        return str(minutes // 60) + 'h'
+    else:
+        return str(minutes // 60) + 'h ' + str(minutes % 60) + 'm'
+
 def main():
     """
     Only run when this module is run directly
@@ -27,6 +38,7 @@ def main():
 
     data = parse_file(argv[1])
     data['title'] = 'Daily Report'
+    data['minutes_to_string'] = minutes_to_string
 
     create_plots(data)
     create_report(data)
