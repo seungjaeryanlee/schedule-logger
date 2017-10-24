@@ -193,7 +193,7 @@ def parse_file(filename):
 
     # Get Date
     date_str = _get_date_from_filename(filename)
-    if date_str == None:
+    if date_str is None:
         while True:
             date_str = input('What is the date (YYYY-MM-DD)? ')
             if _is_date_string(date_str):
