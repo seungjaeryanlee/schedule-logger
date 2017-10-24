@@ -32,3 +32,9 @@ th, td {
     text-align: center;
     font-size: 20px;
 }
+
+/* Div */
+.report {
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
