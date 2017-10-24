@@ -6,6 +6,17 @@ from matplotlib import pyplot
 import matplotlib
 
 ALLOW_KOREAN = True
+MINIMUM_LABEL_PERCENT = 5
+
+def autopct(percent):
+    """
+    Custom autopct for pie charts that returns empty string if the percentage
+    is too small.
+    """
+    if percent >= MINIMUM_LABEL_PERCENT:
+        return '%.2f%%' % percent
+    else:
+        return ''
 
 def pie_chart(filename, actions_list):
     """
@@ -16,8 +27,16 @@ def pie_chart(filename, actions_list):
     labels = [action['label'] for action in actions_list]
     sizes = [action['duration'] for action in actions_list]
 
+    # Erase label if too small
+    sizes_sum = sum(sizes)
+    for i, _ in enumerate(labels):
+        percent = sizes[i] / sizes_sum * 100
+        if percent < MINIMUM_LABEL_PERCENT:
+            labels[i] = ''
+
+
     _, ax1 = pyplot.subplots()
-    ax1.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=90)
+    ax1.pie(sizes, labels=labels, autopct=autopct, startangle=90)
     # Ensures that pie is drawn as a circle
     ax1.axis('equal')
 
