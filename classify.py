@@ -37,7 +37,7 @@ def classify_action(regex_to_class, action_to_class, action):
         if re.search(regex, action):
             return classification
 
-    if action_to_class[action]:
+    if action in action_to_class:
         return action_to_class[action]
 
     answer = ask_class(action)
