@@ -45,10 +45,17 @@ class Parser:
         of classification of actions in the lines.
         """
         parsed_list = []
-        last_timestamp = '000' # TODO: Use actual "time"
+        last_timestamp = timedelta(hours=0, minutes=0)
         for line in lines:
+            if line == '~':
+                continue # TODO isPM
             timestamp, actions = self.parse_line(line)
-            parsed_list.append({ 'start_time': last_timestamp, 'end_time': timestamp, 'actions': actions })
+            parsed_list.append({
+                'start_time': last_timestamp,
+                'end_time': timestamp,
+                'duration': timestamp - last_timestamp,
+                'actions': actions
+            })
             last_timestamp = timestamp
 
         return parsed_list
@@ -59,10 +66,30 @@ class Parser:
         of the line.
         """
         timestamp, actions = line[0:5], line[5:].split('/')
-        timestamp = timestamp.strip()
+        timestamp = self.string_to_timedelta(timestamp.strip())
         actions = [action.strip() for action in actions]
 
         return (timestamp, actions)
+
+    def string_to_timedelta(self, string):
+        """
+        Converts string-type timestamp to timedelta-type timestamp.
+
+        Examples
+        --------
+        string_to_timedelta('000') == timedelta(hours=0, minutes=0)
+        string_to_timedelta('030') == timedelta(hours=0, minutes=30)
+        string_to_timedelta('100') == timedelta(hours=1, minutes=0)
+        string_to_timedelta('1200') == timedelta(hours=12, minutes=0)
+        """
+        if len(string) == 3:
+            hour = string[0]
+            minute = string[1:3]
+        elif len(string) == 4:
+            hour = string[0:2]
+            minute = string[2:4]
+
+        return timedelta(hours=int(hour), minutes=int(minute))
 
 if __name__ == '__main__':
     parser = Parser()
