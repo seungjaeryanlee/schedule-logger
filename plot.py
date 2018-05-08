@@ -15,8 +15,7 @@ def autopct(percent):
     """
     if percent >= MINIMUM_LABEL_PERCENT:
         return '%.2f%%' % percent
-    else:
-        return ''
+    return ''
 
 def pie_chart(filename, actions_list):
     """

@@ -178,8 +178,8 @@ def _get_date_from_filename(filename):
     # Check format
     if _is_date_string(date_str):
         return date_str
-    else:
-        return None
+
+    return None
 
 def parse_file(filename):
     """

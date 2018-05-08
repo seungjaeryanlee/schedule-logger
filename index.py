@@ -19,8 +19,8 @@ def minutes_to_string(minutes):
         return str(minutes % 60) + 'm'
     elif minutes % 60 == 0:
         return str(minutes // 60) + 'h'
-    else:
-        return str(minutes // 60) + 'h ' + str(minutes % 60) + 'm'
+
+    return str(minutes // 60) + 'h ' + str(minutes % 60) + 'm'
 
 def main():
     """

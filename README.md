@@ -1,5 +1,7 @@
 # DailyStat
 
+[![Build Status](https://travis-ci.org/seungjaeryanlee/dailystat.svg?branch=master)](https://travis-ci.org/seungjaeryanlee/dailystat)
+
 ## Running
 
 The `index.py` file takes one argument: the name of the input text file. Running
