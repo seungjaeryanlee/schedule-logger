@@ -1,9 +1,7 @@
 # Custom
-worthy.regex
-neither.regex
-rest.regex
-db.sqlite3
-unclassified.log
+action_to_class.csv
+regex_to_class.csv
+log.txt
 report/*.png
 report/*.html
 
