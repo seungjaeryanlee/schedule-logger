@@ -6,8 +6,10 @@ from the data.
 """
 import os.path
 from sys import argv
+from datetime import timedelta
 
-from parse import parse_file
+from parse import parse_file, Parser
+from classify import Classifier
 from plot import create_plots
 from report import create_report
 
@@ -36,12 +38,33 @@ def main():
         print('No such file exists')
         quit()
 
-    data = parse_file(argv[1])
-    data['title'] = 'Daily Report'
-    data['minutes_to_string'] = minutes_to_string
+    # data = parse_file(argv[1])
+    # data['title'] = 'Daily Report'
+    # data['minutes_to_string'] = minutes_to_string
 
-    create_plots(data)
-    create_report(data)
+    # create_plots(data)
+    # create_report(data)
+
+    parser = Parser()
+    classifier = Classifier()
+
+    activities = parser.parse_file(argv[1])
+    total_duration = {
+        'W': timedelta(hours=0, minutes=0),
+        'R': timedelta(hours=0, minutes=0),
+        'N': timedelta(hours=0, minutes=0),
+    }
+    
+    for activity in activities:
+        duration = activity['duration']
+        actions = activity['actions']
+        divided_duration = duration / len(actions)
+
+        for action in actions:
+            classification = classifier.classify_action(action)
+            total_duration[classification] += divided_duration
+
+    print(total_duration)
 
 
 if __name__ == '__main__':
