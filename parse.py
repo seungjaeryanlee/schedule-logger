@@ -49,7 +49,13 @@ class Parser:
         Parses the given line and returns a dictionary with classification
         of the line.
         """
-        pass
+        time, actions = line[0:5], line[5:].split('/')
+        actions = [action.strip() for action in actions]
+        return (time, actions)
+
+if __name__ == '__main__':
+    parser = Parser()
+    time, action = parser.parse_line('000  Rest (???) / Rest (TV)')
 
 
 
