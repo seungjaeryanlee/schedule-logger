@@ -58,38 +58,39 @@ def prepare_data(filename):
     parser = Parser()
     classifier = Classifier()
 
-    activities = parser.parse_file(filename)
-    total_duration = {
+    class_duration = {    # Dictionary for duration of each class
         'W': timedelta(hours=0, minutes=0),
         'R': timedelta(hours=0, minutes=0),
         'N': timedelta(hours=0, minutes=0),
     }
-    action_durations = {}
-    
+    action_durations = {} # Dictionary for duration of each action
+
+    activities = parser.parse_file(filename)
     for activity in activities:
         duration = activity['duration']
         actions = activity['actions']
-        divided_duration = duration / len(actions)
 
+        divided_duration = duration / len(actions)
         for action in actions:
             classification = classifier.classify_action(action)
-            total_duration[classification] += divided_duration
+            class_duration[classification] += divided_duration
             if action in action_durations:
                 action_durations[action] += divided_duration
             else:
                 action_durations[action] = divided_duration
 
-    sorted_action_durations = sorted(action_durations.items(), 
+    sorted_action_durations = sorted(action_durations.items(),
                                      key=lambda tup: tup[1], reverse=True)
 
+    # Add structure to data and return
     plot_data = {
         'summary_pie_chart': {
-            'total_duration': total_duration,
+            'class_duration': class_duration,
         },
     }
     report_data = {
         'sorted_action_durations': sorted_action_durations,
-        'total_duration': total_duration,
+        'class_duration': class_duration,
         'timedelta_to_string': timedelta_to_string,
     }
     return plot_data, report_data

@@ -19,7 +19,7 @@
                 {% for label in ['W', 'R', 'N'] %}
                     <tr>
                         <td class="category">{{ label }}</td>
-                        <td class="duration">{{ timedelta_to_string(total_duration[label]) }}</td>
+                        <td class="duration">{{ timedelta_to_string(class_duration[label]) }}</td>
                     </tr>
                 {% endfor %}
             </table>

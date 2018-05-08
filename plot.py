@@ -62,7 +62,7 @@ def create_summary_pie_chart(data, filename='summary'):
     """
     # The slices will be ordered and plotted counter-clockwise
     labels = ['W', 'R', 'N']
-    sizes = [data['total_duration'][label].seconds for label in labels]
+    sizes = [data['class_duration'][label].seconds for label in labels]
 
     _, ax1 = pyplot.subplots()
     ax1.pie(sizes, labels=labels, autopct=autopct, startangle=90)
