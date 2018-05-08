@@ -55,8 +55,7 @@ class Classifier:
         answer = self.ask_class(action)
         return answer
 
-    @staticmethod
-    def ask_class(action):
+    def ask_class(self, action):
         """
         Asks user the classification of the given action.
         """
@@ -64,9 +63,21 @@ class Classifier:
             print(action)
             answer = input('Should the action above be classified W, R or N?: ')
             if answer in ['W', 'R', 'N']: # 'WRN' allows empty classification
+                self.append_action_to_class_dict(action, answer)
                 return answer
+
+    def append_action_to_class_dict(self, action, classification):
+        """
+        Append new (action, classification) pair to action_to_class dictionary.
+        """
+        # Update local dictionary
+        self.action_to_class[action] = classification
+        
+        # Update file
+        with open('action_to_class.csv', 'a+') as file:
+            file.write('\n{},{}'.format(action, classification))
 
 if __name__ == '__main__':
     classifier = Classifier()
-    c = classifier.classify_action('Rest (asdf)')
+    c = classifier.classify_action('Sleep')
     print(c)
