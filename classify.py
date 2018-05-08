@@ -50,7 +50,7 @@ def ask_class(action):
     while True:
         print(action)
         answer = input('Should the action above be classified W, R or N?: ')
-        if answer in 'WRN':
+        if answer in ['W', 'R', 'N']: # 'WRN' allows empty classification
             return answer
 
 if __name__ == '__main__':
