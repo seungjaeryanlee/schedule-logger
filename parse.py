@@ -10,6 +10,42 @@ from datetime import datetime, timedelta
 
 from classify import classify_action
 
+class Parser:
+    """
+    A file parser that returns a dictionary with information.
+    """
+    def __init__(self):
+        pass
+
+    def parse_file(self, filename):
+        """
+        Parses the file with given filename and returns a dictionary with info
+        of classification of actions in the file.
+        """
+        pass
+
+    def preprocess_file(self, filename):
+        """
+        Preprocesses specified file and returns list of lines.
+        """
+        pass
+
+    def parse_lines(self, lines):
+        """
+        Parses the given list of lines and returns a dictionary with info
+        of classification of actions in the lines.
+        """
+        pass
+
+    def parse_line(self, line):
+        """
+        Parses the given line and returns a dictionary with classification
+        of the line.
+        """
+        pass
+
+
+
 TIMESTAMP_NO_COLON = True
 
 # Get Regex
