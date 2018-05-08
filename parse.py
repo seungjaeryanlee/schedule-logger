@@ -103,20 +103,6 @@ if __name__ == '__main__':
     print(parsed_list)
 
 
-
-TIMESTAMP_NO_COLON = True
-
-# Get Regex
-with open('worthy.regex') as file:
-    WORTHY_REGEX = file.readlines()
-    WORTHY_REGEX = [regex.strip() for regex in WORTHY_REGEX]
-with open('neither.regex') as file:
-    NEITHER_REGEX = file.readlines()
-    NEITHER_REGEX = [regex.strip() for regex in NEITHER_REGEX]
-with open('rest.regex') as file:
-    REST_REGEX = file.readlines()
-    REST_REGEX = [regex.strip() for regex in REST_REGEX]
-
 def _timedelta_to_minutes(time):
     """
     Translates given timedelta to minutes and returns it
@@ -130,83 +116,12 @@ def _timedelta_to_string(time):
     return str(time.seconds // 3600).zfill(2) + ':' + \
         str((time.seconds // 60) % 60).zfill(2)
 
-def _get_timedelta_from_string(string):
-    """
-    Return timedelta from HHMM formatted string if TIMESTAMP_NO_COLON = True,
-    or HH:MM formatted string if TIMESTAMP_NO_COLON = False
-    """
-
-    if TIMESTAMP_NO_COLON:
-        if len(string) == 3:
-            hour = string[0]
-            minute = string[1:3]
-        else: # len(string) == 4
-            hour = string[0:2]
-            minute = string[2:4]
-    else:
-        hour, minute = string.split(':')
-
-    return timedelta(hours=int(hour), minutes=int(minute))
-
 def _log_unclassified(line):
     """
     Appends given line to a log for later review
     """
     with open('unclassified.log', 'a+') as log:
         log.write(line + '\n')
-
-def _parse_actions(line, actions):
-    """
-    Return 'W' (Worthy), 'N' (Neither), 'R' (Rest), 'X' (Unclassified) after
-    classifying given actions with regex. If 'X' (Unclassified), the line is
-    logged for review.
-
-    The classification algorithm follows:
-    1. If there is a worthy action, the line is classified worthy.
-    2. If there is no worthy action, and there is an unclassified action, the
-       line is unclassified.
-    3. If there is no worthy action or unclassified action, if there is a
-       neither action, the line is classified neither.
-    4. If there is no worthy or unclassified or neither action, the line is
-       classified rest.
-    """
-
-    has_worthy = False
-    has_neither = False
-    has_rest = False
-    has_unclassified = False
-
-    # Check all actions and see which type of actions the line has
-    for action in actions:
-        is_classified = False
-        for regex in WORTHY_REGEX:
-            if re.search(regex, action):
-                is_classified = True
-                has_worthy = True
-        for regex in NEITHER_REGEX:
-            if re.search(regex, action):
-                is_classified = True
-                has_neither = True
-        for regex in REST_REGEX:
-            if re.search(regex, action):
-                is_classified = True
-                has_rest = True
-        if not is_classified:
-            has_unclassified = True
-
-    # Classify line based on the actions
-    if has_worthy:
-        return 'W'
-    if has_unclassified:
-        _log_unclassified(line)
-        return 'X'
-    if has_neither:
-        return 'N'
-    if has_rest:
-        return 'R'
-
-    # Should never reach since every action is classified as one of the four
-    return 'X'
 
 
 def _save_to_db(date_str, worthy_str, neither_str, rest_str):
@@ -308,66 +223,11 @@ def parse_file(filename):
     neither_dict = {}
     rest_dict = {}
 
-    # Whether the time is after 12:59 and should be converted to 24-hour format
-    is_pm = False
+    # Parse File
+    # TODO Use Parser
 
-
-    for line in lines:
-        # Check if the line is a PM token ('~')
-        if line[0] == '~':
-            is_pm = True
-            continue
-
-        # Parse time
-        time_str = line[0:5].strip()
-        this_time = _get_timedelta_from_string(time_str)
-
-        # If after 12:59, add 12 hours to make it 24-hour format
-        if is_pm:
-            this_time += timedelta(hours=12)
-
-        # Calculate timedelta
-        delta_time = this_time - previous_time
-        previous_time = this_time
-
-        # Parse actions
-        tokens = line[5:].split('/')
-        tokens = [token.strip() for token in tokens]
-
-        # Classify actions
-        result = _parse_actions(line, tokens)
-        if result == 'W':
-            worthy_time += delta_time
-            _update_dict(worthy_dict, line[5:], delta_time)
-        elif result == 'N':
-            neither_time += delta_time
-            _update_dict(neither_dict, line[5:], delta_time)
-        elif result == 'R':
-            rest_time += delta_time
-            _update_dict(rest_dict, line[5:], delta_time)
-        else:
-            # Ask user
-            while True:
-                print(line)
-                answer = input(
-                    'Should the event above be marked W, N or R? (W, N, R): ')
-                if answer == 'W':
-                    worthy_time += delta_time
-                    _update_dict(worthy_dict, line[5:], delta_time)
-                    break
-                elif answer == 'N':
-                    neither_time += delta_time
-                    _update_dict(neither_dict, line[5:], delta_time)
-                    break
-                elif answer == 'R':
-                    rest_time += delta_time
-                    _update_dict(rest_dict, line[5:], delta_time)
-                    break
-                else:
-                    print((
-                        'Unrecognized output: type W for worthy, N for neither'
-                        ', or R for rest,'
-                    ))
+    # Classify actions
+    # TODO Use Classifier
 
     worthy_str = _timedelta_to_string(worthy_time)
     neither_str = _timedelta_to_string(neither_time)
