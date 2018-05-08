@@ -23,7 +23,9 @@ class Parser:
         of classification of actions in the file.
         """
         lines = self.preprocess_file(filename)
-        pass
+        parsed_list = self.parse_lines(lines)
+
+        return parsed_list
 
     @staticmethod
     def preprocess_file(filename):
@@ -56,9 +58,11 @@ class Parser:
         Parses the given line and returns a dictionary with classification
         of the line.
         """
-        time, actions = line[0:5], line[5:].split('/')
+        timestamp, actions = line[0:5], line[5:].split('/')
+        timestamp = timestamp.strip()
         actions = [action.strip() for action in actions]
-        return (time, actions)
+
+        return (timestamp, actions)
 
 if __name__ == '__main__':
     parser = Parser()
