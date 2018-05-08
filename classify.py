@@ -15,7 +15,8 @@ class Classifier:
         self.regex_to_class = self.import_regex_to_class_dict()
         self.action_to_class = self.import_action_to_class_dict()
 
-    def import_regex_to_class_dict(self):
+    @staticmethod
+    def import_regex_to_class_dict():
         """
         Imports regex-to-class dictionary from regex_to_class.csv.
         """
@@ -28,7 +29,8 @@ class Classifier:
 
         return regex_to_class
 
-    def import_action_to_class_dict(self):
+    @staticmethod
+    def import_action_to_class_dict():
         """
         Imports action-to-class dictionary from action_to_class.csv.
         """
@@ -43,7 +45,8 @@ class Classifier:
 
     def classify_action(self, action):
         """
-        Returns 'W', 'R', or 'N' if the given action is Worthy, Rest, or Neither.
+        Returns 'W', 'R', or 'N' if the given action is Worthy, Rest, or
+        Neither.
         """
         for regex, classification in self.regex_to_class.items():
             if re.search(regex, action):
@@ -72,7 +75,7 @@ class Classifier:
         """
         # Update local dictionary
         self.action_to_class[action] = classification
-        
+
         # Update file
         with open('action_to_class.csv', 'a+') as file:
             file.write('\n{},{}'.format(action, classification))

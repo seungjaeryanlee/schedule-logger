@@ -69,7 +69,8 @@ class Parser:
 
         return (timestamp, actions)
 
-    def string_to_timedelta(self, string, is_pm):
+    @staticmethod
+    def string_to_timedelta(string, is_pm):
         """
         Converts string-type timestamp to timedelta-type timestamp.
 
