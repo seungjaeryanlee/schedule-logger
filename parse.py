@@ -8,7 +8,7 @@ import re
 import sqlite3
 from datetime import datetime, timedelta
 
-from classify import classify_action
+from classify import Classifier
 
 class Parser:
     """
@@ -22,13 +22,20 @@ class Parser:
         Parses the file with given filename and returns a dictionary with info
         of classification of actions in the file.
         """
+        lines = self.preprocess_file(filename)
         pass
 
-    def preprocess_file(self, filename):
+    @staticmethod
+    def preprocess_file(filename):
         """
         Preprocesses specified file and returns list of lines.
         """
-        pass
+        with open(filename, encoding='utf-8') as input_file:
+            lines = input_file.readlines()
+            lines = [line.strip() for line in lines]
+            lines = [line for line in lines if line[0] != '#']
+
+        return lines
 
     def parse_lines(self, lines):
         """
