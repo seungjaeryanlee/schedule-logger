@@ -8,6 +8,8 @@ import re
 import sqlite3
 from datetime import datetime, timedelta
 
+from classify import classify_action
+
 TIMESTAMP_NO_COLON = True
 
 # Get Regex
