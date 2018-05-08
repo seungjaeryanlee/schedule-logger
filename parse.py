@@ -49,7 +49,7 @@ class Parser:
         for line in lines:
             timestamp, actions = self.parse_line(line)
             parsed_list.append({ 'start_time': last_timestamp, 'end_time': timestamp, 'actions': actions })
-            timestamp = last_timestamp
+            last_timestamp = timestamp
 
         return parsed_list
 
@@ -66,11 +66,8 @@ class Parser:
 
 if __name__ == '__main__':
     parser = Parser()
-    parsed_list = parser.parse_lines([
-        '000  Rest (???) / Rest (TV)', '000  Rest (???) / Rest (TV)'
-    ])
+    parsed_list = parser.parse_file('LOG-2018-05-02.txt')
     print(parsed_list)
-    time, action = parser.parse_line('000  Rest (???) / Rest (TV)')
 
 
 
