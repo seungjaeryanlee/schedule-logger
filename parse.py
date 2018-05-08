@@ -42,7 +42,14 @@ class Parser:
         Parses the given list of lines and returns a dictionary with info
         of classification of actions in the lines.
         """
-        pass
+        parsed_list = []
+        last_timestamp = '000' # TODO: Use actual "time"
+        for line in lines:
+            timestamp, actions = self.parse_line(line)
+            parsed_list.append({ 'start_time': last_timestamp, 'end_time': timestamp, 'actions': actions })
+            timestamp = last_timestamp
+
+        return parsed_list
 
     def parse_line(self, line):
         """
@@ -55,6 +62,10 @@ class Parser:
 
 if __name__ == '__main__':
     parser = Parser()
+    parsed_list = parser.parse_lines([
+        '000  Rest (???) / Rest (TV)', '000  Rest (???) / Rest (TV)'
+    ])
+    print(parsed_list)
     time, action = parser.parse_line('000  Rest (???) / Rest (TV)')
 
 
