@@ -10,70 +10,34 @@
         <h3 class="date">{{ date }}</h3>
         <div class="summary">
             <h3 class="section-title">Summary</h3>
-            <img src="daily_pie.png">
+            <img src="summary.png">
             <table class="summary-table">
                 <tr>
                     <th>Category</th>
                     <th>Duration</th>
                 </tr>
-                {% for category in summary %}
+                {% for label in ['W', 'R', 'N'] %}
                     <tr>
-                        <td class="category">{{ category['label'] }}</td>
-                        <td class="duration">{{ minutes_to_string(category['duration']) }}</td>
+                        <td class="category">{{ label }}</td>
+                        <td class="duration">{{ timedelta_to_string(class_duration[label]) }}</td>
                     </tr>
                 {% endfor %}
             </table>
         </div>
-        <div class="details">
-            <h2 class="section-title">Details</h2>
-            <div class="details-worthy">
-                <h3 class="details-title">Worthy</h3>
-                <img src="worthy_pie.png">
-                <table class="worthy-list">
+        <div class="list-actions">
+            <h2>Actions</h3>
+            <table>
+                <tr>
+                    <th>Action</th>
+                    <th>Duration</th>
+                </tr>
+                {% for action, duration in sorted_action_durations %}
                     <tr>
-                        <th>Action</th>
-                        <th>Duration</th>
+                        <td class="action">{{ action }}</td>
+                        <td class="duration">{{ timedelta_to_string(duration) }}</td>
                     </tr>
-                    {% for worthy_action in worthy_list %}
-                    <tr>
-                        <td class="action">{{ worthy_action['label'] }}</td>
-                        <td class="duration">{{ minutes_to_string(worthy_action['duration']) }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
-            <div class="details-neither">
-                <h3 class="details-title">Neither</h3>
-                <img src="neither_pie.png">
-                <table class="neither-list">
-                    <tr>
-                        <th>Action</th>
-                        <th>Duration</th>
-                    </tr>
-                    {% for neither_action in neither_list %}
-                    <tr>
-                        <td class="action">{{ neither_action['label'] }}</td>
-                        <td class="duration">{{ minutes_to_string(neither_action['duration']) }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
-            <div class="details-rest">
-                <h3 class="details-title">Rest</h3>
-                <img src="rest_pie.png">
-                <table class="rest-list">
-                    <tr>
-                        <th>Action</th>
-                        <th>Duration</th>
-                    </tr>
-                    {% for rest_action in rest_list %}
-                    <tr>
-                        <td class="action">{{ rest_action['label'] }}</td>
-                        <td class="duration">{{ minutes_to_string(rest_action['duration']) }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
+                {% endfor %}
+            </table>
         </div>
     </div>
 </body>
