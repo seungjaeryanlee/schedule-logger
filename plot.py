@@ -4,6 +4,7 @@ This module creates plots for the report using matplotlib.
 """
 from matplotlib import pyplot
 import matplotlib
+from datetime import timedelta
 
 ALLOW_KOREAN = True
 MINIMUM_LABEL_PERCENT = 5
@@ -55,3 +56,21 @@ def create_plots(plot_data):
     pie_chart(filename='worthy_pie', actions_list=plot_data['worthy_list'])
     pie_chart(filename='neither_pie', actions_list=plot_data['neither_list'])
     pie_chart(filename='rest_pie', actions_list=plot_data['rest_list'])
+
+def create_summary_pie_chart(total_duration, filename='summary'):
+    """
+    Creates a pie chart displaying the ratio of three classes 'W', 'R', and 'N'
+    and saves the image to 'filename.png'.
+    """
+    # The slices will be ordered and plotted counter-clockwise
+    labels = ['W', 'R', 'N']
+    sizes = [total_duration[label].seconds for label in labels]
+
+    _, ax1 = pyplot.subplots()
+    ax1.pie(sizes, labels=labels, autopct=autopct, startangle=90)
+    # Ensures that pie is drawn as a circle
+    ax1.axis('equal')
+
+    # Save figure
+    pyplot.savefig('report/' + filename + '.png', bbox_inches='tight')
+    pyplot.clf()

@@ -10,7 +10,7 @@ from datetime import timedelta
 
 from parse import parse_file, Parser
 from classify import Classifier
-from plot import create_plots
+from plot import create_plots, create_summary_pie_chart
 from report import create_report
 
 def minutes_to_string(minutes):
@@ -64,7 +64,7 @@ def main():
             classification = classifier.classify_action(action)
             total_duration[classification] += divided_duration
 
-    print(total_duration)
+    create_summary_pie_chart(total_duration)
 
 
 if __name__ == '__main__':
