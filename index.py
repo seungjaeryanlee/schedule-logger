@@ -38,13 +38,6 @@ def main():
         print('No such file exists')
         quit()
 
-    # data = parse_file(argv[1])
-    # data['title'] = 'Daily Report'
-    # data['minutes_to_string'] = minutes_to_string
-
-    # create_plots(data)
-    # create_report(data)
-
     parser = Parser()
     classifier = Classifier()
 
@@ -65,6 +58,7 @@ def main():
             total_duration[classification] += divided_duration
 
     create_summary_pie_chart(total_duration)
+    create_report({ 'total_duration': total_duration })
 
 
 if __name__ == '__main__':

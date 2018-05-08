@@ -10,21 +10,21 @@
         <h3 class="date">{{ date }}</h3>
         <div class="summary">
             <h3 class="section-title">Summary</h3>
-            <img src="daily_pie.png">
+            <img src="summary.png">
             <table class="summary-table">
                 <tr>
                     <th>Category</th>
                     <th>Duration</th>
                 </tr>
-                {% for category in summary %}
+                {% for label in ['W', 'R', 'N'] %}
                     <tr>
-                        <td class="category">{{ category['label'] }}</td>
-                        <td class="duration">{{ minutes_to_string(category['duration']) }}</td>
+                        <td class="category">{{ label }}</td>
+                        <td class="duration">{{ total_duration[label].seconds // 60 }}</td>
                     </tr>
                 {% endfor %}
             </table>
         </div>
-        <div class="details">
+        <!-- <div class="details">
             <h2 class="section-title">Details</h2>
             <div class="details-worthy">
                 <h3 class="details-title">Worthy</h3>
@@ -74,7 +74,7 @@
                     {% endfor %}
                 </table>
             </div>
-        </div>
+        </div> -->
     </div>
 </body>
 </html>
