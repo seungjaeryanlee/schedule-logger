@@ -64,6 +64,7 @@ def prepare_data(filename):
         'R': timedelta(hours=0, minutes=0),
         'N': timedelta(hours=0, minutes=0),
     }
+    action_durations = {}
     
     for activity in activities:
         duration = activity['duration']
@@ -73,6 +74,13 @@ def prepare_data(filename):
         for action in actions:
             classification = classifier.classify_action(action)
             total_duration[classification] += divided_duration
+            if action in action_durations:
+                action_durations[action] += divided_duration
+            else:
+                action_durations[action] = divided_duration
+
+    sorted_action_durations = sorted(action_durations.items(), 
+                                     key=lambda tup: tup[1], reverse=True)
 
     plot_data = {
         'summary_pie_chart': {
@@ -80,6 +88,7 @@ def prepare_data(filename):
         },
     }
     report_data = {
+        'sorted_action_durations': sorted_action_durations,
         'total_duration': total_duration,
         'timedelta_to_string': timedelta_to_string,
     }

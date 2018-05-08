@@ -24,6 +24,21 @@
                 {% endfor %}
             </table>
         </div>
+        <div class="list-actions">
+            <h2>Actions</h3>
+            <table>
+                <tr>
+                    <th>Action</th>
+                    <th>Duration</th>
+                </tr>
+                {% for action, duration in sorted_action_durations %}
+                    <tr>
+                        <td class="action">{{ action }}</td>
+                        <td class="duration">{{ timedelta_to_string(duration) }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
         <!-- <div class="details">
             <h2 class="section-title">Details</h2>
             <div class="details-worthy">
