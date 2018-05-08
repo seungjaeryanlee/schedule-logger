@@ -29,7 +29,6 @@ def import_action_to_class_dict():
 
     return action_to_class
 
-
 def classify_action(regex_to_class, action_to_class, action):
     """
     Returns 'W', 'R', or 'N' if the given action is Worthy, Rest, or Neither.
@@ -41,10 +40,21 @@ def classify_action(regex_to_class, action_to_class, action):
     if action_to_class[action]:
         return action_to_class[action]
 
-    return None
+    answer = ask_class(action)
+    return answer
+
+def ask_class(action):
+    """
+    Asks user the classification of the given action.
+    """
+    while True:
+        print(action)
+        answer = input('Should the action above be classified W, R or N?: ')
+        if answer in 'WRN':
+            return answer
 
 if __name__ == '__main__':
     atoc = import_action_to_class_dict()
     rtoc = import_regex_to_class_dict()
-    c = classify_action(rtoc, atoc, 'Rest (asdf)')
+    c = classify_action(rtoc, atoc, 'f (asdf)')
     print(c)
