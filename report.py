@@ -8,9 +8,9 @@ from sys import argv
 from datetime import timedelta
 from jinja2 import Environment, FileSystemLoader
 
-from parse import Parser
 from classify import Classifier
-from plot import create_summary_pie_chart
+from parse import Parser
+from plot import create_plots
 
 
 PATH = os.path.dirname(os.path.abspath(__file__))
@@ -111,7 +111,7 @@ def main():
 
     plot_data, report_data = prepare_data(argv[1])
 
-    create_summary_pie_chart(plot_data['summary_pie_chart'])
+    create_plots(plot_data)
     create_report(report_data)
 
 

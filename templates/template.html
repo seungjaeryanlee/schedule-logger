@@ -39,57 +39,6 @@
                 {% endfor %}
             </table>
         </div>
-        <!-- <div class="details">
-            <h2 class="section-title">Details</h2>
-            <div class="details-worthy">
-                <h3 class="details-title">Worthy</h3>
-                <img src="worthy_pie.png">
-                <table class="worthy-list">
-                    <tr>
-                        <th>Action</th>
-                        <th>Duration</th>
-                    </tr>
-                    {% for worthy_action in worthy_list %}
-                    <tr>
-                        <td class="action">{{ worthy_action['label'] }}</td>
-                        <td class="duration">{{ minutes_to_string(worthy_action['duration']) }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
-            <div class="details-neither">
-                <h3 class="details-title">Neither</h3>
-                <img src="neither_pie.png">
-                <table class="neither-list">
-                    <tr>
-                        <th>Action</th>
-                        <th>Duration</th>
-                    </tr>
-                    {% for neither_action in neither_list %}
-                    <tr>
-                        <td class="action">{{ neither_action['label'] }}</td>
-                        <td class="duration">{{ minutes_to_string(neither_action['duration']) }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
-            <div class="details-rest">
-                <h3 class="details-title">Rest</h3>
-                <img src="rest_pie.png">
-                <table class="rest-list">
-                    <tr>
-                        <th>Action</th>
-                        <th>Duration</th>
-                    </tr>
-                    {% for rest_action in rest_list %}
-                    <tr>
-                        <td class="action">{{ rest_action['label'] }}</td>
-                        <td class="duration">{{ minutes_to_string(rest_action['duration']) }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
-        </div> -->
     </div>
 </body>
 </html>

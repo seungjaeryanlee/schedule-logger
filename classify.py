@@ -76,8 +76,3 @@ class Classifier:
         # Update file
         with open('action_to_class.csv', 'a+') as file:
             file.write('\n{},{}'.format(action, classification))
-
-if __name__ == '__main__':
-    classifier = Classifier()
-    c = classifier.classify_action('Sleep')
-    print(c)
