@@ -37,36 +37,28 @@ def create_report(report_data):
         output.write(html)
 
 
-def minutes_to_string(minutes):
+def timedelta_to_string(timestamp):
     """
-    Returns '0h', '0m' or '0h 0m' formatted string from given minutes (int).
+    Returns '0h', '0m' or '0h 0m' formatted string from given timedelta-type
+    timestamp.
     """
-    if minutes // 60 == 0:
-        return str(minutes % 60) + 'm'
-    elif minutes % 60 == 0:
-        return str(minutes // 60) + 'h'
+    if timestamp.seconds // 3600 == 0:
+        return str(timestamp.seconds // 60 % 60) + 'm'
+    elif timestamp.seconds // 60 % 60 == 0:
+        return str(timestamp.seconds // 3600) + 'h'
 
-    return str(minutes // 60) + 'h ' + str(minutes % 60) + 'm'
+    return '{}h {}m'.format(str(timestamp.seconds // 3600),
+                            str(timestamp.seconds // 60 % 60))
 
-
-def main():
+def prepare_data(filename):
     """
-    Only run when this module is run directly
+    Parse and classify text from file with given filename to prepare data to
+    generate the report.
     """
-    if len(argv) == 1:
-        print('No argument specified.')
-        quit()
-    if len(argv) == 3:
-        print('Too many arguments specified.')
-        quit()
-    if not os.path.exists(argv[1]):
-        print('No such file exists')
-        quit()
-
     parser = Parser()
     classifier = Classifier()
 
-    activities = parser.parse_file(argv[1])
+    activities = parser.parse_file(filename)
     total_duration = {
         'W': timedelta(hours=0, minutes=0),
         'R': timedelta(hours=0, minutes=0),
@@ -82,8 +74,35 @@ def main():
             classification = classifier.classify_action(action)
             total_duration[classification] += divided_duration
 
-    create_summary_pie_chart(total_duration)
-    create_report({ 'total_duration': total_duration })
+    plot_data = {
+        'summary_pie_chart': {
+            'total_duration': total_duration,
+        },
+    }
+    report_data = {
+        'total_duration': total_duration,
+        'timedelta_to_string': timedelta_to_string,
+    }
+    return plot_data, report_data
+
+def main():
+    """
+    Only run when this module is run directly
+    """
+    if len(argv) == 1:
+        print('No argument specified.')
+        quit()
+    if len(argv) == 3:
+        print('Too many arguments specified.')
+        quit()
+    if not os.path.exists(argv[1]):
+        print('No such file exists')
+        quit()
+
+    plot_data, report_data = prepare_data(argv[1])
+
+    create_summary_pie_chart(plot_data['summary_pie_chart'])
+    create_report(report_data)
 
 
 if __name__ == '__main__':

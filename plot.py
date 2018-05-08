@@ -6,7 +6,6 @@ from matplotlib import pyplot
 import matplotlib
 from datetime import timedelta
 
-ALLOW_KOREAN = True
 MINIMUM_LABEL_PERCENT = 5
 
 def autopct(percent):
@@ -48,23 +47,22 @@ def create_plots(plot_data):
     """
     Create plots based on the given plot_data.
     """
-    if ALLOW_KOREAN:
-        # Use font that has Korean letters
-        matplotlib.rc('font', family='NanumGothic')
+    # Use font that has Korean letters
+    matplotlib.rc('font', family='NanumGothic')
 
     pie_chart(filename='daily_pie', actions_list=plot_data['summary'])
     pie_chart(filename='worthy_pie', actions_list=plot_data['worthy_list'])
     pie_chart(filename='neither_pie', actions_list=plot_data['neither_list'])
     pie_chart(filename='rest_pie', actions_list=plot_data['rest_list'])
 
-def create_summary_pie_chart(total_duration, filename='summary'):
+def create_summary_pie_chart(data, filename='summary'):
     """
     Creates a pie chart displaying the ratio of three classes 'W', 'R', and 'N'
     and saves the image to 'filename.png'.
     """
     # The slices will be ordered and plotted counter-clockwise
     labels = ['W', 'R', 'N']
-    sizes = [total_duration[label].seconds for label in labels]
+    sizes = [data['total_duration'][label].seconds for label in labels]
 
     _, ax1 = pyplot.subplots()
     ax1.pie(sizes, labels=labels, autopct=autopct, startangle=90)
